@@ -1,4 +1,4 @@
-[{
+const CARDS = [{
 	"playerClass": "WARLOCK",
 	"text": "<b>英雄技能</b>\n召唤一个6/6的地狱火。",
 	"set": "EXPERT1",
