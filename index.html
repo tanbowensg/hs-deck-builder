@@ -6,9 +6,20 @@
 	<script src="db/cards.js"></script>
 	<script src="db/decks.js"></script>
 	<script src="node_modules/lodash/lodash.js"></script>
-	<script src="js.js"></script>
+	<script src="node_modules/jquery/dist/jquery.js"></script>
+	<script src="node_modules/vue/dist/vue.js"></script>
 </head>
 <body>
-	
+	<div id="deck-builder">
+		<button class="cost-filter" 
+			v-for="cost in costs"
+			v-on:click="filterCost(cost)" >
+			{{ cost }}
+		</button>
+		<div v-for="card in cards">
+			<img v-bind:src="card.img" v-bind:alt="card.name">
+		</div>
+	</div>
 </body>
+<script src="js.js"></script>
 </html>
