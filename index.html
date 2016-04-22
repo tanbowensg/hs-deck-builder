@@ -13,9 +13,15 @@
 	<div id="deck-builder">
 		<button class="cost-filter" 
 			v-for="cost in costs"
-			v-on:click="filterCost(cost)" >
+			v-on:click="filter({cost: cost})" >
 			{{ cost }}
 		</button>
+		<button class="type-filter" 
+			v-for="type in types"
+			v-on:click="filter({type: type})" >
+			{{ type }}
+		</button>
+		<select name="" id="" class="mechanics-filter"></select>
 		<div v-for="card in cards">
 			<img v-bind:src="card.img" v-bind:alt="card.name">
 		</div>
