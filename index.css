@@ -25,6 +25,7 @@
 }
 
 .deck-card {
+    cursor: pointer;
     height: 30px;
 }
 

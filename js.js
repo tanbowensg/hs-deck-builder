@@ -4,7 +4,6 @@ _CARDS.forEach(val => {
 		val.playerClass = "NEUTURAL"
 	}
 	val.inDeck = 0
-	val.reachLimit = false
 })
 const cardViewer = new Vue({
 	el: '#deck-builder',
@@ -25,49 +24,41 @@ const cardViewer = new Vue({
 				name: 1,
 				selected: false 
 			},
-				
 			{
 				displayName: "2费",
 				name: 2,
 				selected: false 
 			},
-				
 			{
 				displayName: "3费",
 				name: 3,
 				selected: false 
 			},
-				
 			{
 				displayName: "4费",
 				name: 4,
 				selected: false 
 			},
-				
 			{
 				displayName: "5费",
 				name: 5,
 				selected: false 
 			},
-				
 			{
 				displayName: "6费",
 				name: 6,
 				selected: false 
 			},
-				
 			{
 				displayName: "7费",
 				name: 7,
 				selected: false 
 			},
-				
 			{
 				displayName: "8费",
 				name: 8,
 				selected: false 
 			},
-				
 			{
 				displayName: "9费",
 				name: 9,
@@ -213,17 +204,44 @@ const cardViewer = new Vue({
 			return this.filters
 		},
 		handleCardClick: function(card) {
-			if (card.inDeck === 2) {
-				return false
-			} else if (card.inDeck === 1 ){
-				card.inDeck = 2
-				card.reachLimit = true
-			} else {
-				this.deck.push(card)
-				card.inDeck = 1
+			switch(card.inDeck) {
+				case 2:
+					return false
+				case 1:
+          if (card.rarity === 'LEGENDARY') {
+            return false
+          }
+					card.inDeck = 2
+					break
+				default:
+					this.deck.push(card)
+					card.inDeck = 1
+					break
 			}
+      // this.deckLength = _.reduce(this.deck, (sum, val) => {
+      //   return sum + val.inDeck
+      // },0)
+      console.log(this.deck)
 			console.log(card.inDeck)
 		},
+		handleDeckClick: function(card) {
+			switch(card.inDeck) {
+				case 2:
+					card.inDeck = 1
+					break
+				case 1:
+					card.inDeck = 0
+          console.log(this.deck, [card])
+					this.deck = _.filter(this.deck, val => {return !(val.name === card.name)})
+          console.log('现在的',this.deck)
+			}
+      
+		},
+    getDeckLength: function() {
+      return _.reduce(this.deck, (sum, val) => {
+        return sum + val.inDeck
+      },0)
+    },
 		chunkCards: function() {
 			this.cards = _.chunk(this.cards, this.PAGE_LIMIT)
 			return this.cards

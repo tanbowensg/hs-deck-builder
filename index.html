@@ -52,15 +52,19 @@
 					<div class="card" v-for="card in cards[currentPage]">
 						<img class="card-img"
 						v-on:click="handleCardClick(card)"
+						v-bind:disabled="card.inDeck === 2 || (card.inDeck ===1 && card.rarity === 'LEGENDARY')"
+						v-bind:class="{limit2:card.inDeck === 2 || (card.inDeck ===1 && card.rarity === 'LEGENDARY')}"
 						v-bind:src="card.img" 
 						v-bind:alt="card.name">
 					</div>
 				</div>
 				<!--卡组显示区-->
 				<div class="deck-container">
+					总共卡牌数：{{ getDeckLength() }}
 					<ul class="deck-card-container">
 						<li class="deck-card" 
-							v-for="card in deck">
+							v-for="card in deck"
+							v-on:click="handleDeckClick(card)">
 							<img class="deck-card-img"
 								v-bind:src="card.img">
 							<span class="deck-card-name">
