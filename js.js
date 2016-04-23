@@ -3,8 +3,10 @@ _CARDS.forEach(val => {
 	if (!val.playerClass) {
 		val.playerClass = "NEUTURAL"
 	}
+	val.inDeck = 0
+	val.reachLimit = false
 })
-new Vue({
+const cardViewer = new Vue({
 	el: '#deck-builder',
 	created: function(){
 		this.chunkCards()
@@ -153,12 +155,9 @@ new Vue({
 		filters: {},
 		PAGE_LIMIT: 8,
 		currentPage:0,
+		deck:[],
 	},
 	methods: {
-		update: function() {
-			this.filter(this.filters)
-			this.chunkCards()
-		},
 		handleFilterClick: function ({cost, type, playerClass}, filterInfo) {
 			// 之所以omitBy一下是因为我又想用解构赋值，又不想参数里出现undefined
 			const params = _.omitBy({cost, type, playerClass}, _.isUndefined)
@@ -212,6 +211,18 @@ new Vue({
 				}
 			})
 			return this.filters
+		},
+		handleCardClick: function(card) {
+			if (card.inDeck === 2) {
+				return false
+			} else if (card.inDeck === 1 ){
+				card.inDeck = 2
+				card.reachLimit = true
+			} else {
+				this.deck.push(card)
+				card.inDeck = 1
+			}
+			console.log(card.inDeck)
 		},
 		chunkCards: function() {
 			this.cards = _.chunk(this.cards, this.PAGE_LIMIT)

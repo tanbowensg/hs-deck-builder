@@ -12,52 +12,81 @@
 </head>
 <body>
 	<div id="deck-builder">
-		<!--费用过滤-->
-		<div class="cost-filter">
-			<button class="cost-filter-btn" 
-				v-for="cost in costs"
-				v-bind:class="{'selected': cost.selected}"
-				v-on:click="handleFilterClick({cost: cost.name}, cost)">
-				{{ cost.displayName }}
-			</button>
-		</div>
-		<!--职业过滤-->
-		<div class="class-filter">
-			<button class="class-filter-btn"
-				v-for="class in classes"
-				v-bind:class="{'selected': class.selected}"
-				v-on:click="handleFilterClick({playerClass: class.name}, class)" >
-				{{ class.displayName }}
-			</button>
-		</div>
-		<!--类型过滤-->
-		<div class="type-filter">
-			<button class="type-filter-btn" 
-				v-for="type in types"
-				v-bind:class="{'selected': type.selected}"
-				v-on:click="handleFilterClick({type: type.name}, type)" >
-				{{ type.displayName }}
-			</button>
-		</div>
-		<!--异能过滤-->
-		<select name="" id="" class="mechanics-filter"></select>
-		<!--卡牌显示区-->
-		<div class="cards-container">
-			<div class="card" v-for="card in cards[currentPage]">
-				<img class="card-img"v-bind:src="card.img" v-bind:alt="card.name">
+		<div class="card-viewer">
+			<!--筛选器-->
+			<div class="card-filters">
+				<!--费用过滤-->
+				<div class="cost-filter">
+					<button class="cost-filter-btn" 
+						v-for="cost in costs"
+						v-bind:class="{'selected': cost.selected}"
+						v-on:click="handleFilterClick({cost: cost.name}, cost)">
+						{{ cost.displayName }}
+					</button>
+				</div>
+				<!--职业过滤-->
+				<div class="class-filter">
+					<button class="class-filter-btn"
+						v-for="class in classes"
+						v-bind:class="{'selected': class.selected}"
+						v-on:click="handleFilterClick({playerClass: class.name}, class)" >
+						{{ class.displayName }}
+					</button>
+				</div>
+				<!--类型过滤-->
+				<div class="type-filter">
+					<button class="type-filter-btn" 
+						v-for="type in types"
+						v-bind:class="{'selected': type.selected}"
+						v-on:click="handleFilterClick({type: type.name}, type)" >
+						{{ type.displayName }}
+					</button>
+				</div>
+				<!--异能过滤-->
+				<select name="" id="" class="mechanics-filter"></select>
 			</div>
+			<!--主要显示区-->
+			<div class="card-main">
+				<!--卡牌显示区-->
+				<div class="card-container">
+					<div class="card" v-for="card in cards[currentPage]">
+						<img class="card-img"
+						v-on:click="handleCardClick(card)"
+						v-bind:src="card.img" 
+						v-bind:alt="card.name">
+					</div>
+				</div>
+				<!--卡组显示区-->
+				<div class="deck-container">
+					<ul class="deck-card-container">
+						<li class="deck-card" 
+							v-for="card in deck">
+							<img class="deck-card-img"
+								v-bind:src="card.img">
+							<span class="deck-card-name">
+								{{ card.name }}
+							</span>
+							<span class="deck-card-num">
+								{{ card.inDeck }}
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!--翻页-->
+			<button class="paginate-btn" id="pre-page" 
+				v-on:click="prePage()"
+				v-bind:disabled="currentPage===0">
+				上一页
+			</button>
+			<button class="paginate-btn" id="next-page" 
+				v-on:click="nextPage()"
+				v-bind:disabled="currentPage===cards.length - 1 ">
+				下一页
+			</button>
 		</div>
-		<!--翻页-->
-		<button class="paginate-btn" id="pre-page" 
-			v-on:click="prePage()"
-			v-bind:disabled="currentPage===0">
-			上一页
-		</button>
-		<button class="paginate-btn" id="next-page" 
-			v-on:click="nextPage()"
-			v-bind:disabled="currentPage===cards.length - 1 ">
-			下一页
-		</button>
+		<div class="deck-viewer">
+		</div>
 	</div>
 </body>
 <script src="js.js"></script>
