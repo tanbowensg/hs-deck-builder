@@ -1,10 +1,16 @@
-const _CARDS = _.cloneDeep(_.filter(CARDS, 'collectible'))
-_CARDS.forEach(val => {
-	if (!val.playerClass) {
-		val.playerClass = "NEUTURAL"
-	}
-	val.inDeck = 0
-})
+const _CARDS = _
+  .chain(CARDS)
+  .cloneDeep()
+  .filter('collectible')
+  .forEach(val => {
+    if (!val.playerClass) {
+      val.playerClass = "NEUTURAL"
+    }
+    val.inDeck = 0
+  })
+  .sortBy('cost')
+  .value()
+  
 const cardViewer = new Vue({
 	el: '#deck-builder',
 	created: function(){
@@ -16,131 +22,136 @@ const cardViewer = new Vue({
 		costs: [
 			{
 				displayName: "0费",
-				"nam": 0,
-				"selecte": false 
+				name: [0],
+				selected : false 
 			},
 			{
 				displayName: "1费",
-				name: 1,
+				name: [1],
 				selected: false 
 			},
 			{
 				displayName: "2费",
-				name: 2,
+				name: [2],
 				selected: false 
 			},
 			{
 				displayName: "3费",
-				name: 3,
+				name: [3],
 				selected: false 
 			},
 			{
 				displayName: "4费",
-				name: 4,
+				name: [4],
 				selected: false 
 			},
 			{
 				displayName: "5费",
-				name: 5,
+				name: [5],
 				selected: false 
 			},
 			{
 				displayName: "6费",
-				name: 6,
+				name: [6],
 				selected: false 
 			},
 			{
 				displayName: "7费",
-				name: 7,
+				name: [7],
 				selected: false 
 			},
 			{
 				displayName: "8费",
-				name: 8,
+				name: [8],
 				selected: false 
 			},
 			{
 				displayName: "9费",
-				name: 9,
+				name: [9],
+				selected: false 
+			},
+      {
+				displayName: "10+费",
+				name: [10, 12, 20],
 				selected: false 
 			},
 		],
 		types: [
 			{
 				displayName: '随从',
-				name: 'MINION',
+				name: ['MINION'],
 				selected: false
 			},
 			{
 				displayName: '法术',
-				name: 'SPELL',
+				name: ['SPELL'],
 				selected: false
 			},
 		],
 		classes: [
 			{
 				displayName: '战士',
-				name: 'WARRIOR',
+				name: ['WARRIOR',],
 				selected: false
 			},
 			{
 				displayName: '猎人',
-				name: 'HUNTER',
+				name: ['HUNTER',],
 				selected: false
 			},
 			{
 				displayName: '萨满',
-				name: 'SHAMAN',
+				name: ['SHAMAN',],
 				selected: false
 			},
 			{
 				displayName: '潜行者',
-				name: 'ROGUE',
+				name: ['ROGUE',],
 				selected: false
 			},
 			{
 				displayName: '法师',
-				name: 'MAGE',
+				name: ['MAGE',],
 				selected: false
 			},
 			{
 				displayName: '德鲁伊',
-				name: 'DRUID',
+				name: ['DRUID',],
 				selected: false
 			},
 			{
 				displayName: '圣骑士',
-				name: 'PALADIN',
+				name: ['PALADIN',],
 				selected: false
 			},
 			{
 				displayName: '术士',
-				name: 'WARLOCK',
+				name: ['WARLOCK',],
 				selected: false
 			},
 			{
 				displayName: '牧师',
-				name: 'PRIEST',
+				name: ['PRIEST',],
 				selected: false
 			},
 			{
 				displayName: '中立',
-				name: 'NEUTURAL',
+				name: ['NEUTURAL',],
 				selected: false
 			},
 		],
 		mechanics: [
 			{
 				displayName: '冲锋',
-				name:'CHARGE'
+				name: ['CHARGE']
 			},
 			{
 				displayName: '亡语',
-				name: 'DEATHRATTLE'
+				name: ['DEATHRATTLE']
 			},
 			{
 				displayName: '战吼',
-				name: 'BATTLECRY'
+				name: ['BATTLECRY']
 			},
 		],
 		filters: {},
@@ -180,6 +191,7 @@ const cardViewer = new Vue({
 						return true
 					}
 				})
+        .sortBy('cost')
 				.value()
 			this.chunkCards()
 			return this.cards
@@ -187,20 +199,23 @@ const cardViewer = new Vue({
 		updateFilters: function(params) {
 			_.forEach(params, (val, key) => {
 				if (_.isArray(this.filters[key])){
-					if (this.filters[key].includes(val)){
+          // 判断现在的filters 里的 filter 和点击的 filter 是否有交集
+          console.log(_.intersection(this.filters[key], val))
+					if (_.intersection(this.filters[key], val).length > 0){
 						// 正好是1就说明删掉这个就没有 filter 了，所以干脆直接删了
 						if (this.filters[key].length === 1){
 							this.filters = _.omit(this.filters, key)
 						} else {
-							_.pull(this.filters[key], val)
+							this.filters[key] = _.difference(this.filters[key], val)
 						}
 					} else {
-						this.filters[key].push(val)
+						this.filters[key] = this.filters[key].concat(val)
 					}
 				} else {
-					this.filters[key] = [val]
+					this.filters[key] = val
 				}
 			})
+      console.log(this.filters)
 			return this.filters
 		},
 		handleCardClick: function(card) {
