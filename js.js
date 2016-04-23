@@ -1,4 +1,9 @@
 const _CARDS = _.cloneDeep(_.filter(CARDS, 'collectible'))
+_CARDS.forEach(val => {
+	if (!val.playerClass) {
+		val.playerClass = "NEUTURAL"
+	}
+})
 new Vue({
 	el: '#deck-builder',
 	created: function(){
@@ -7,8 +12,8 @@ new Vue({
 	data: {
 		CARDS: _CARDS,
 		cards: _CARDS,
-		costs: [0,1,2,3,4,5,6,7,8,9,'清空法力'],
-		types: ['MINION', 'SPELL','清空类型'],
+		costs: [0,1,2,3,4,5,6,7,8,9,'clear'],
+		types: ['MINION', 'SPELL','clear'],
 		classes: [
 			{
 				displayName: '战士',
@@ -47,6 +52,10 @@ new Vue({
 				name: 'PRIEST'
 			},
 			{
+				displayName: '中立',
+				name: 'NEUTURAL'
+			},
+			{
 				displayName: '清空职业',
 				name: 'clear'
 			},
@@ -80,10 +89,29 @@ new Vue({
 			// 之所以omitBy一下是因为我又想用解构赋值，又不想参数里出现undefined
 			let params = _.omitBy({cost, type, playerClass}, _.isUndefined)
 			this.updateFilters(params)
+			console.log(this.filters)
 			this.cards = _
 				.chain(this.CARDS)
 				.cloneDeep()
-				.filter(this.filters)
+				.filter(card => {
+					let valid = false;
+					if (_.size(this.filters) > 0){
+						_.forEach(this.filters, (filter,filterKey) => {
+							_.forEach(filter, val => {
+								if (card[filterKey] === val) {
+									valid = true
+									return false
+								} else {
+									valid = false
+								}
+							})
+							if (valid === false) return false
+						})
+						return valid
+					} else {
+						return true
+					}
+				})
 				.value()
 			this.chunkCards()
 			return this.cards
@@ -93,7 +121,20 @@ new Vue({
 				if (val === 'clear' || val.name === 'clear') {
 					this.filters = _.omit(this.filters, key)
 				} else {
-					this.filters[key] = val
+					if (_.isArray(this.filters[key])){
+						if (this.filters[key].includes(val)){
+							// 正好是1就说明删掉这个就没有 filter 了，所以干脆直接删了
+							if (this.filters[key].length === 1){
+								this.filters = _.omit(this.filters, key)
+							} else {
+								_.pull(this.filters[key], val)
+							}
+						} else {
+							this.filters[key].push(val)
+						}
+					} else {
+						this.filters[key] = [val]
+					}
 				}
 			})
 			return this.filters

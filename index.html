@@ -15,12 +15,13 @@
 		<div class="cost-filter">
 			<button class="cost-filter-btn" 
 				v-for="cost in costs"
+				v-bind:class="filters.hasOwnProperty('cost')"
 				v-on:click="filter({cost: cost})" >
 				{{ cost }}
 			</button>	
 		</div>
 		<div class="class-filter">
-			<button class="class-filter-btn" 
+			<button class="class-filter-btn"
 				v-for="class in classes"
 				v-on:click="filter({playerClass: class.name})" >
 				{{ class.displayName }}
