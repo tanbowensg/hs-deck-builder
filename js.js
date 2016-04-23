@@ -3,8 +3,8 @@ new Vue({
 	el: '#deck-builder',
 	data: {
 		cards: _CARDS,
-		costs: [0,1,2,3,4,5,6,7,8,9,''],
-		types: ['MINION', 'SPELL',''],
+		costs: [0,1,2,3,4,5,6,7,8,9,'clear'],
+		types: ['MINION', 'SPELL','clear'],
 		mechanics: [
 			{
 				displayName: '冲锋',
@@ -23,10 +23,23 @@ new Vue({
 	},
 	methods: {
 		filter: function({cost, type}) {
-			let params = {cost, type}
-			this.filters = _.merge(this.filters, params)
+			// 之所以omitBy一下是因为我又想用解构赋值，又不想参数里出现undefined
+			let params = _.omitBy({cost, type}, _.isUndefined)
+			this.updateFilters(params)
+			console.log(JSON.stringify(this.filters))
 			this.cards = _.filter(_CARDS, this.filters)
 		},
+		updateFilters: function(params) {
+			_.forEach(params, (val, key) => {
+				console.log(val)
+				if (val === 'clear') {
+					console.log('omit', this.filters, key)
+					this.filters = _.omit(this.filters, key)
+				} else {
+					this.filters[key] = val
+				}
+			})
+		}
 	}
 })
 
