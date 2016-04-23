@@ -1,0 +1,15 @@
+.cards-container {
+    /*display: flex;
+    flex-wrap: wrap;*/
+    border: 1px solid black;
+    width:600px;
+}
+
+.card {
+    /*flex:1;*/
+    display: inline-block;
+}
+
+.card-img{
+    width: 150px;
+}

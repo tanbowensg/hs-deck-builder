@@ -8,23 +8,47 @@
 	<script src="node_modules/lodash/lodash.js"></script>
 	<script src="node_modules/jquery/dist/jquery.js"></script>
 	<script src="node_modules/vue/dist/vue.js"></script>
+	<link rel="stylesheet" href="index.css">
 </head>
 <body>
 	<div id="deck-builder">
-		<button class="cost-filter" 
-			v-for="cost in costs"
-			v-on:click="filter({cost: cost})" >
-			{{ cost }}
-		</button>
-		<button class="type-filter" 
-			v-for="type in types"
-			v-on:click="filter({type: type})" >
-			{{ type }}
-		</button>
-		<select name="" id="" class="mechanics-filter"></select>
-		<div v-for="card in cards">
-			<img v-bind:src="card.img" v-bind:alt="card.name">
+		<div class="cost-filter">
+			<button class="cost-filter-btn" 
+				v-for="cost in costs"
+				v-on:click="filter({cost: cost})" >
+				{{ cost }}
+			</button>	
 		</div>
+		<div class="class-filter">
+			<button class="class-filter-btn" 
+				v-for="class in classes"
+				v-on:click="filter({playerClass: class.name})" >
+				{{ class.displayName }}
+			</button>
+		</div>
+		<div class="type-filter">
+			<button class="type-filter-btn" 
+				v-for="type in types"
+				v-on:click="filter({type: type})" >
+				{{ type }}
+			</button>
+		</div>
+		<select name="" id="" class="mechanics-filter"></select>
+		<div class="cards-container">
+			<div class="card" v-for="card in cards[currentPage]">
+				<img class="card-img"v-bind:src="card.img" v-bind:alt="card.name">
+			</div>
+		</div>
+		<button class="paginate-btn" id="pre-page" 
+			v-on:click="prePage()"
+			v-bind:disabled="currentPage===0">
+			上一页
+		</button>
+		<button class="paginate-btn" id="next-page" 
+			v-on:click="nextPage()"
+			v-bind:disabled="currentPage===cards.length - 1 ">
+			下一页
+		</button>
 	</div>
 </body>
 <script src="js.js"></script>
