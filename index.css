@@ -13,3 +13,7 @@
 .card-img{
     width: 150px;
 }
+
+.selected {
+    color:red;
+}

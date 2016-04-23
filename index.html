@@ -12,34 +12,42 @@
 </head>
 <body>
 	<div id="deck-builder">
+		<!--费用过滤-->
 		<div class="cost-filter">
 			<button class="cost-filter-btn" 
 				v-for="cost in costs"
-				v-bind:class="filters.hasOwnProperty('cost')"
-				v-on:click="filter({cost: cost})" >
-				{{ cost }}
-			</button>	
+				v-bind:class="{'selected': cost.selected}"
+				v-on:click="handleFilterClick({cost: cost.name}, cost)">
+				{{ cost.displayName }}
+			</button>
 		</div>
+		<!--职业过滤-->
 		<div class="class-filter">
 			<button class="class-filter-btn"
 				v-for="class in classes"
-				v-on:click="filter({playerClass: class.name})" >
+				v-bind:class="{'selected': class.selected}"
+				v-on:click="handleFilterClick({playerClass: class.name}, class)" >
 				{{ class.displayName }}
 			</button>
 		</div>
+		<!--类型过滤-->
 		<div class="type-filter">
 			<button class="type-filter-btn" 
 				v-for="type in types"
-				v-on:click="filter({type: type})" >
-				{{ type }}
+				v-bind:class="{'selected': type.selected}"
+				v-on:click="handleFilterClick({type: type.name}, type)" >
+				{{ type.displayName }}
 			</button>
 		</div>
+		<!--异能过滤-->
 		<select name="" id="" class="mechanics-filter"></select>
+		<!--卡牌显示区-->
 		<div class="cards-container">
 			<div class="card" v-for="card in cards[currentPage]">
 				<img class="card-img"v-bind:src="card.img" v-bind:alt="card.name">
 			</div>
 		</div>
+		<!--翻页-->
 		<button class="paginate-btn" id="pre-page" 
 			v-on:click="prePage()"
 			v-bind:disabled="currentPage===0">

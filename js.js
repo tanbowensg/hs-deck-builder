@@ -12,54 +12,129 @@ new Vue({
 	data: {
 		CARDS: _CARDS,
 		cards: _CARDS,
-		costs: [0,1,2,3,4,5,6,7,8,9,'clear'],
-		types: ['MINION', 'SPELL','clear'],
+		costs: [
+			{
+				displayName: "0费",
+				"nam": 0,
+				"selecte": false 
+			},
+			{
+				displayName: "1费",
+				name: 1,
+				selected: false 
+			},
+				
+			{
+				displayName: "2费",
+				name: 2,
+				selected: false 
+			},
+				
+			{
+				displayName: "3费",
+				name: 3,
+				selected: false 
+			},
+				
+			{
+				displayName: "4费",
+				name: 4,
+				selected: false 
+			},
+				
+			{
+				displayName: "5费",
+				name: 5,
+				selected: false 
+			},
+				
+			{
+				displayName: "6费",
+				name: 6,
+				selected: false 
+			},
+				
+			{
+				displayName: "7费",
+				name: 7,
+				selected: false 
+			},
+				
+			{
+				displayName: "8费",
+				name: 8,
+				selected: false 
+			},
+				
+			{
+				displayName: "9费",
+				name: 9,
+				selected: false 
+			},
+		],
+		types: [
+			{
+				displayName: '随从',
+				name: 'MINION',
+				selected: false
+			},
+			{
+				displayName: '法术',
+				name: 'SPELL',
+				selected: false
+			},
+		],
 		classes: [
 			{
 				displayName: '战士',
-				name: 'WARRIOR'
+				name: 'WARRIOR',
+				selected: false
 			},
 			{
 				displayName: '猎人',
-				name: 'HUNTER'
+				name: 'HUNTER',
+				selected: false
 			},
 			{
 				displayName: '萨满',
-				name: 'SHAMAN'
+				name: 'SHAMAN',
+				selected: false
 			},
 			{
 				displayName: '潜行者',
-				name: 'ROGUE'
+				name: 'ROGUE',
+				selected: false
 			},
 			{
 				displayName: '法师',
-				name: 'MAGE'
+				name: 'MAGE',
+				selected: false
 			},
 			{
 				displayName: '德鲁伊',
-				name: 'DRUID'
+				name: 'DRUID',
+				selected: false
 			},
 			{
 				displayName: '圣骑士',
-				name: 'PALADIN'
+				name: 'PALADIN',
+				selected: false
 			},
 			{
 				displayName: '术士',
-				name: 'WARLOCK'
+				name: 'WARLOCK',
+				selected: false
 			},
 			{
 				displayName: '牧师',
-				name: 'PRIEST'
+				name: 'PRIEST',
+				selected: false
 			},
 			{
 				displayName: '中立',
-				name: 'NEUTURAL'
+				name: 'NEUTURAL',
+				selected: false
 			},
-			{
-				displayName: '清空职业',
-				name: 'clear'
-			},
-			
 		],
 		mechanics: [
 			{
@@ -84,15 +159,18 @@ new Vue({
 			this.filter(this.filters)
 			this.chunkCards()
 		},
-		filter: function({cost, type, playerClass}) {
-			this.currentPage = 0
+		handleFilterClick: function ({cost, type, playerClass}, filterInfo) {
 			// 之所以omitBy一下是因为我又想用解构赋值，又不想参数里出现undefined
-			let params = _.omitBy({cost, type, playerClass}, _.isUndefined)
+			const params = _.omitBy({cost, type, playerClass}, _.isUndefined)
+			// 在处理 selected,因为vm 里的过滤器名字是复数的，所以要另传一个filterInfo
+			filterInfo.selected = !filterInfo.selected
+			this.currentPage = 0
 			this.updateFilters(params)
-			console.log(this.filters)
+			this.filter(params)
+		},
+		filter: function(params) {
 			this.cards = _
 				.chain(this.CARDS)
-				.cloneDeep()
 				.filter(card => {
 					let valid = false;
 					if (_.size(this.filters) > 0){
@@ -118,23 +196,19 @@ new Vue({
 		},
 		updateFilters: function(params) {
 			_.forEach(params, (val, key) => {
-				if (val === 'clear' || val.name === 'clear') {
-					this.filters = _.omit(this.filters, key)
-				} else {
-					if (_.isArray(this.filters[key])){
-						if (this.filters[key].includes(val)){
-							// 正好是1就说明删掉这个就没有 filter 了，所以干脆直接删了
-							if (this.filters[key].length === 1){
-								this.filters = _.omit(this.filters, key)
-							} else {
-								_.pull(this.filters[key], val)
-							}
+				if (_.isArray(this.filters[key])){
+					if (this.filters[key].includes(val)){
+						// 正好是1就说明删掉这个就没有 filter 了，所以干脆直接删了
+						if (this.filters[key].length === 1){
+							this.filters = _.omit(this.filters, key)
 						} else {
-							this.filters[key].push(val)
+							_.pull(this.filters[key], val)
 						}
 					} else {
-						this.filters[key] = [val]
+						this.filters[key].push(val)
 					}
+				} else {
+					this.filters[key] = [val]
 				}
 			})
 			return this.filters
