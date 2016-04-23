@@ -88,6 +88,28 @@ const cardViewer = new Vue({
 				selected: false
 			},
 		],
+		rarities: [
+			{
+				displayName: '普通',
+				name: ['COMMON'],
+				selected: false
+			},
+			{
+				displayName: '稀有',
+				name: ['RARE'],
+				selected: false
+			},
+			{
+				displayName: '史诗',
+				name: ['EPIC'],
+				selected: false
+			},
+			{
+				displayName: '传说',
+				name: ['LEGENDARY'],
+				selected: false
+			},
+		],
 		classes: [
 			{
 				displayName: '战士',
@@ -160,9 +182,9 @@ const cardViewer = new Vue({
 		deck:[],
 	},
 	methods: {
-		handleFilterClick: function ({cost, type, playerClass}, filterInfo) {
+		handleFilterClick: function ({cost, type, playerClass, rarity}, filterInfo) {
 			// 之所以omitBy一下是因为我又想用解构赋值，又不想参数里出现undefined
-			const params = _.omitBy({cost, type, playerClass}, _.isUndefined)
+			const params = _.omitBy({cost, type, playerClass, rarity}, _.isUndefined)
 			// 在处理 selected,因为vm 里的过滤器名字是复数的，所以要另传一个filterInfo
 			filterInfo.selected = !filterInfo.selected
 			this.currentPage = 0

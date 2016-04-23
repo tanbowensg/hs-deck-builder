@@ -42,6 +42,15 @@
 						{{ type.displayName }}
 					</button>
 				</div>
+				<!--稀有度过滤-->
+				<div class=" rarity-filter">
+					<button class=" rarity-filter-btn" 
+						v-for=" rarity in  rarities"
+						v-bind:class="{'selected':  rarity.selected}"
+						v-on:click="handleFilterClick({ rarity:  rarity.name},  rarity)" >
+						{{  rarity.displayName }}
+					</button>
+				</div>
 				<!--异能过滤-->
 				<select name="" id="" class="mechanics-filter"></select>
 			</div>
