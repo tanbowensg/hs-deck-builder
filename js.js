@@ -337,6 +337,11 @@ const cardViewer = new Vue({
 					})
 				}
 			})
+			_.forEach(this.CARDS, card => {
+				if (_.has(card, 'inDeck')) {
+					card.inDeck = 0;
+				}
+			})
 			if (refilter) {
 				this.filter()
 			}
@@ -362,7 +367,6 @@ const cardViewer = new Vue({
 		filter: function(params) {
 			this.cards = _
 				.chain(this.CARDS)
-				.cloneDeep()
 				.filter(card => {
 					let valid = false;
 					// 如果是已经选择了职业了，那就先把其他的职业的牌的全部过滤掉
@@ -423,6 +427,10 @@ const cardViewer = new Vue({
 			}
 		},
 		handleCardClick: function(card) {
+			// 如果还没选择职业的话，就不能选卡
+			if (!this.state.currentClass) {
+				return false
+			}
 			switch(card.inDeck) {
 				case 2:
 					return false
