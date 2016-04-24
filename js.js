@@ -24,310 +24,356 @@ const cardViewer = new Vue({
 		this.chunkCards()
 	},
 	data: {
-		CARDS: _CARDS,
 		cards: _CARDS,
-		costs: [
-			{
-				displayName: "0费",
-				name: [0],
-				selected : false 
-			},
-			{
-				displayName: "1费",
-				name: [1],
-				selected: false 
-			},
-			{
-				displayName: "2费",
-				name: [2],
-				selected: false 
-			},
-			{
-				displayName: "3费",
-				name: [3],
-				selected: false 
-			},
-			{
-				displayName: "4费",
-				name: [4],
-				selected: false 
-			},
-			{
-				displayName: "5费",
-				name: [5],
-				selected: false 
-			},
-			{
-				displayName: "6费",
-				name: [6],
-				selected: false 
-			},
-			{
-				displayName: "7费",
-				name: [7],
-				selected: false 
-			},
-			{
-				displayName: "8费",
-				name: [8],
-				selected: false 
-			},
-			{
-				displayName: "9费",
-				name: [9],
-				selected: false 
-			},
-      {
-				displayName: "10+费",
-				name: [10, 12, 20],
-				selected: false 
-			},
-		],
-		types: [
-			{
-				displayName: '随从',
-				name: ['MINION'],
-				selected: false
-			},
-			{
-				displayName: '法术',
-				name: ['SPELL'],
-				selected: false
-			},
-		],
-		rarities: [
-			{
-				displayName: '普通',
-				name: ['COMMON'],
-				selected: false
-			},
-			{
-				displayName: '稀有',
-				name: ['RARE'],
-				selected: false
-			},
-			{
-				displayName: '史诗',
-				name: ['EPIC'],
-				selected: false
-			},
-			{
-				displayName: '传说',
-				name: ['LEGENDARY'],
-				selected: false
-			},
-		],
-		classes: [
-			{
-				displayName: '战士',
-				name: ['WARRIOR',],
-				selected: false
-			},
-			{
-				displayName: '猎人',
-				name: ['HUNTER',],
-				selected: false
-			},
-			{
-				displayName: '萨满',
-				name: ['SHAMAN',],
-				selected: false
-			},
-			{
-				displayName: '潜行者',
-				name: ['ROGUE',],
-				selected: false
-			},
-			{
-				displayName: '法师',
-				name: ['MAGE',],
-				selected: false
-			},
-			{
-				displayName: '德鲁伊',
-				name: ['DRUID',],
-				selected: false
-			},
-			{
-				displayName: '圣骑士',
-				name: ['PALADIN',],
-				selected: false
-			},
-			{
-				displayName: '术士',
-				name: ['WARLOCK',],
-				selected: false
-			},
-			{
-				displayName: '牧师',
-				name: ['PRIEST',],
-				selected: false
-			},
-			{
-				displayName: '中立',
-				name: ['NEUTURAL',],
-				selected: false
-			},
-		],
-		mechanics: [
-			{
-				displayName: '冲锋',
-				name: ['CHARGE'],
-				selected: false
-			},
-			{
-				displayName: '亡语',
-				name: ['DEATHRATTLE'],
-				selected: false
-			},
-			{
-				displayName: '光环效果',
-				name: ['AURA'],
-				selected: false
-			},
-			{
-				displayName: '相邻随从效果',
-				name: ['ADJACENT_BUFF'],
-				selected: false
-			},
-			{
-				displayName: '战吼',
-				name: ['BATTLECRY'],
-				selected: false
-			},
-			{
-				displayName: '连击',
-				name: ['COMBO'],
-				selected: false
-			},
-			{
-				displayName: '冰冻',
-				name: ['FREEZE'],
-				selected: false
-			},
-			{
-				displayName: '过载',
-				name: ['OVERLOAD'],
-				selected: false
-			},
-			{
-				displayName: '法术伤害',
-				name: ['SPELLPOWER'],
-				selected: false
-			},
-			{
-				displayName: '嘲讽',
-				name: ['TAUNT'],
-				selected: false
-			},
-			{
-				displayName: '圣盾',
-				name: ['DIVINE_SHIELD'],
-				selected: false
-			},
-			{
-				displayName: '风怒',
-				name: ['WINDFURY'],
-				selected: false
-			},
-			{
-				displayName: '激怒',
-				name: ['ENRAGED'],
-				selected: false
-			},
-			{
-				displayName: '潜行',
-				name: ['STEALTH'],
-				selected: false
-			},
-			{
-				displayName: '50%几率打错',
-				name: ['FORGETFUL'],
-				selected: false
-			},
-			{
-				displayName: '激励',
-				name: ['INSPIRE'],
-				selected: false
-			},
-			{
-				displayName: '魔免',
-				name: ['ImmuneToSpellpower'],
-				selected: false
-			},
-			{
-				displayName: '不可见的亡语',
-				name: ['InvisibleDeathrattle'],
-				selected: false
-			},
-			{
-				displayName: '一万攻',
-				name: ['POISONOUS'],
-				selected: false
-			},
-			{
-				displayName: '奥秘',
-				name: ['SECRET'],
-				selected: false
-			},
-			{
-				displayName: '发现',
-				name: ['DISCOVER'],
-				selected: false
-			}
-		],
-		races: [
-			{
-				"name": ["MURLOC"],
-				"displayName": "鱼人",
-				"selected": false
-			}, {
-				"name": ["MECHANICAL"],
-				"displayName": "机械",
-				"selected": false
-			}, {
-				"name": ["DEMON"],
-				"displayName": "恶魔",
-				"selected": false
-			}, {
-				"name": ["PIRATE"],
-				"displayName": "海盗",
-				"selected": false
-			}, {
-				"name": ["BEAST"],
-				"displayName": "野兽",
-				"selected": false
-			}, {
-				"name": ["DRAGON"],
-				"displayName": "龙",
-				"selected": false
-			}, {
-				"name": ["TOTEM"],
-				"displayName": "图腾",
-				"selected": false
-			}
-		],
+		CARDS: _CARDS,
+		DATA :{
+			PAGE_LIMIT: 8,
+			costs: [
+				{
+					displayName: "0费",
+					name: [0],
+					selected : false 
+				},
+				{
+					displayName: "1费",
+					name: [1],
+					selected: false 
+				},
+				{
+					displayName: "2费",
+					name: [2],
+					selected: false 
+				},
+				{
+					displayName: "3费",
+					name: [3],
+					selected: false 
+				},
+				{
+					displayName: "4费",
+					name: [4],
+					selected: false 
+				},
+				{
+					displayName: "5费",
+					name: [5],
+					selected: false 
+				},
+				{
+					displayName: "6费",
+					name: [6],
+					selected: false 
+				},
+				{
+					displayName: "7费",
+					name: [7],
+					selected: false 
+				},
+				{
+					displayName: "8费",
+					name: [8],
+					selected: false 
+				},
+				{
+					displayName: "9费",
+					name: [9],
+					selected: false 
+				},
+				{
+					displayName: "10+费",
+					name: [10, 12, 20],
+					selected: false 
+				},
+			],
+			types: [
+				{
+					displayName: '随从',
+					name: ['MINION'],
+					selected: false
+				},
+				{
+					displayName: '法术',
+					name: ['SPELL'],
+					selected: false
+				},
+			],
+			rarities: [
+				{
+					displayName: '普通',
+					name: ['COMMON'],
+					selected: false
+				},
+				{
+					displayName: '稀有',
+					name: ['RARE'],
+					selected: false
+				},
+				{
+					displayName: '史诗',
+					name: ['EPIC'],
+					selected: false
+				},
+				{
+					displayName: '传说',
+					name: ['LEGENDARY'],
+					selected: false
+				},
+			],
+			classes: [
+				{
+					displayName: '战士',
+					name: ['WARRIOR'],
+					selected: false
+				},
+				{
+					displayName: '猎人',
+					name: ['HUNTER'],
+					selected: false
+				},
+				{
+					displayName: '萨满',
+					name: ['SHAMAN'],
+					selected: false
+				},
+				{
+					displayName: '潜行者',
+					name: ['ROGUE'],
+					selected: false
+				},
+				{
+					displayName: '法师',
+					name: ['MAGE'],
+					selected: false
+				},
+				{
+					displayName: '德鲁伊',
+					name: ['DRUID'],
+					selected: false
+				},
+				{
+					displayName: '圣骑士',
+					name: ['PALADIN'],
+					selected: false
+				},
+				{
+					displayName: '术士',
+					name: ['WARLOCK'],
+					selected: false
+				},
+				{
+					displayName: '牧师',
+					name: ['PRIEST'],
+					selected: false
+				},
+				{
+					displayName: '中立',
+					name: ['NEUTURAL'],
+					selected: false
+				},
+			],
+			mechanics: [
+				{
+					displayName: '冲锋',
+					name: ['CHARGE'],
+					selected: false
+				},
+				{
+					displayName: '亡语',
+					name: ['DEATHRATTLE'],
+					selected: false
+				},
+				{
+					displayName: '光环效果',
+					name: ['AURA'],
+					selected: false
+				},
+				{
+					displayName: '相邻随从效果',
+					name: ['ADJACENT_BUFF'],
+					selected: false
+				},
+				{
+					displayName: '战吼',
+					name: ['BATTLECRY'],
+					selected: false
+				},
+				{
+					displayName: '连击',
+					name: ['COMBO'],
+					selected: false
+				},
+				{
+					displayName: '冰冻',
+					name: ['FREEZE'],
+					selected: false
+				},
+				{
+					displayName: '过载',
+					name: ['OVERLOAD'],
+					selected: false
+				},
+				{
+					displayName: '法术伤害',
+					name: ['SPELLPOWER'],
+					selected: false
+				},
+				{
+					displayName: '嘲讽',
+					name: ['TAUNT'],
+					selected: false
+				},
+				{
+					displayName: '圣盾',
+					name: ['DIVINE_SHIELD'],
+					selected: false
+				},
+				{
+					displayName: '风怒',
+					name: ['WINDFURY'],
+					selected: false
+				},
+				{
+					displayName: '激怒',
+					name: ['ENRAGED'],
+					selected: false
+				},
+				{
+					displayName: '潜行',
+					name: ['STEALTH'],
+					selected: false
+				},
+				{
+					displayName: '50%几率打错',
+					name: ['FORGETFUL'],
+					selected: false
+				},
+				{
+					displayName: '激励',
+					name: ['INSPIRE'],
+					selected: false
+				},
+				{
+					displayName: '魔免',
+					name: ['ImmuneToSpellpower'],
+					selected: false
+				},
+				{
+					displayName: '不可见的亡语',
+					name: ['InvisibleDeathrattle'],
+					selected: false
+				},
+				{
+					displayName: '一万攻',
+					name: ['POISONOUS'],
+					selected: false
+				},
+				{
+					displayName: '奥秘',
+					name: ['SECRET'],
+					selected: false
+				},
+				{
+					displayName: '发现',
+					name: ['DISCOVER'],
+					selected: false
+				}
+			],
+			races: [
+				{
+					"name": ["MURLOC"],
+					"displayName": "鱼人",
+					"selected": false
+				}, {
+					"name": ["MECHANICAL"],
+					"displayName": "机械",
+					"selected": false
+				}, {
+					"name": ["DEMON"],
+					"displayName": "恶魔",
+					"selected": false
+				}, {
+					"name": ["PIRATE"],
+					"displayName": "海盗",
+					"selected": false
+				}, {
+					"name": ["BEAST"],
+					"displayName": "野兽",
+					"selected": false
+				}, {
+					"name": ["DRAGON"],
+					"displayName": "龙",
+					"selected": false
+				}, {
+					"name": ["TOTEM"],
+					"displayName": "图腾",
+					"selected": false
+				}
+			],
+		},
+		state:{
+			currentPage:0,
+			currentClass:false,
+			currentClassDisplay:'',
+			selectedMech:{},
+		},
 		filters: {},
-		PAGE_LIMIT: 8,
-		currentPage:0,
 		deck:[],
-		selectedMech:{}
 	},
 	methods: {
+		reset: function(refilter = false) {
+			this.state.currentPage = 0
+			this.filters = {}
+			this.deck = []
+			this.state.currentClass = false
+			this.state.currentClassDisplay = false,
+			this.state.selectedMech = {}
+			// 把所有过滤器都取消选中
+			_.forEach(this.DATA, data => {
+				if (_.isArray(data)) {
+					_.forEach(data, val => {
+						if (_.has(val, 'selected')) {
+							val.selected = false
+						}
+					})
+				}
+			})
+			if (refilter) {
+				this.filter()
+			}
+		},
+		handleChooseClass: function(playerClass){
+			this.reset()
+			this.state.currentClass = playerClass.name[0]
+			this.state.currentClassDisplay = playerClass.displayName
+			this.filter()
+		},
+		handleAbandonClass: function(){
+			this.reset(true)
+		},
 		handleFilterClick: function ({cost, type, playerClass, rarity, race, mechanics}, filterInfo) {
 			// 之所以omitBy一下是因为我又想用解构赋值，又不想参数里出现undefined
 			const params = _.omitBy({cost, type, playerClass, rarity, race, mechanics}, _.isUndefined)
 			// 在处理 selected,因为vm 里的过滤器名字是复数的，所以要另传一个filterInfo
 			filterInfo.selected = !filterInfo.selected
-			this.currentPage = 0
+			this.state.currentPage = 0
 			this.updateFilters(params)
 			this.filter(params)
 		},
 		filter: function(params) {
 			this.cards = _
 				.chain(this.CARDS)
+				.cloneDeep()
 				.filter(card => {
 					let valid = false;
+					// 如果是已经选择了职业了，那就先把其他的职业的牌的全部过滤掉
+						&& card.playerClass !== this.state.currentClass
+						&& card.playerClass !== 'NEUTURAL')
+					if (this.state.currentClass 
+						&& card.playerClass !== this.state.currentClass
+						&& card.playerClass !== 'NEUTURAL') {
+						return false
+					}
+					// 如果没有选择其他职业那就继续过滤
 					if (_.size(this.filters) > 0){
 						_.forEach(this.filters, (filter,filterKey) => {
 							_.forEach(filter, val => {
@@ -347,7 +393,7 @@ const cardViewer = new Vue({
 						return true
 					}
 				})
-        .sortBy('cost')
+				.sortBy('cost')
 				.value()
 			this.chunkCards()
 			return this.cards
@@ -383,9 +429,9 @@ const cardViewer = new Vue({
 				case 2:
 					return false
 				case 1:
-          if (card.rarity === 'LEGENDARY') {
-            return false
-          }
+					if (card.rarity === 'LEGENDARY') {
+						return false
+					}
 					card.inDeck = 2
 					break
 				default:
@@ -393,9 +439,9 @@ const cardViewer = new Vue({
 					card.inDeck = 1
 					break
 			}
-      // this.deckLength = _.reduce(this.deck, (sum, val) => {
-      //   return sum + val.inDeck
-      // },0)
+			// this.deckLength = _.reduce(this.deck, (sum, val) => {
+			//   return sum + val.inDeck
+			// },0)
 		},
 		handleDeckClick: function(card) {
 			switch(card.inDeck) {
@@ -414,14 +460,14 @@ const cardViewer = new Vue({
       },0)
     },
 		chunkCards: function() {
-			this.cards = _.chunk(this.cards, this.PAGE_LIMIT)
+			this.cards = _.chunk(this.cards, this.DATA.PAGE_LIMIT)
 			return this.cards
 		},
 		nextPage: function() {
-			this.currentPage++
+			this.state.currentPage++
 		},
 		prePage: function() {
-			this.currentPage--
+			this.state.currentPage--
 		},
 	}
 })

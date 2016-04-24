@@ -18,7 +18,7 @@
 				<!--费用过滤-->
 				<div class="cost-filter">
 					<button class="cost-filter-btn" 
-						v-for="cost in costs"
+						v-for="cost in DATA.costs"
 						v-bind:class="{'selected': cost.selected}"
 						v-on:click="handleFilterClick({cost: cost.name}, cost)">
 						{{ cost.displayName }}
@@ -27,16 +27,19 @@
 				<!--职业过滤-->
 				<div class="class-filter">
 					<button class="class-filter-btn"
-						v-for="class in classes"
-						v-bind:class="{'selected': class.selected}"
-						v-on:click="handleFilterClick({playerClass: class.name}, class)" >
-						{{ class.displayName }}
+						v-for="playerClass in DATA.classes"
+						v-bind:disabled="state.currentClass
+							&& !playerClass.name.includes('NEUTURAL') 
+							&& !playerClass.name.includes(state.currentClass)"
+						v-bind:class="{'selected': playerClass.selected}"
+						v-on:click="handleFilterClick({playerClass: playerClass.name}, playerClass)" >
+						{{ playerClass.displayName }}
 					</button>
 				</div>
 				<!--类型过滤-->
 				<div class="type-filter">
 					<button class="type-filter-btn" 
-						v-for="type in types"
+						v-for="type in DATA.types"
 						v-bind:class="{'selected': type.selected}"
 						v-on:click="handleFilterClick({type: type.name}, type)" >
 						{{ type.displayName }}
@@ -45,7 +48,7 @@
 				<!--种族过滤-->
 				<div class="race-filter">
 					<button class="race-filter-btn" 
-						v-for="race in races"
+						v-for="race in DATA.races"
 						v-bind:class="{'selected': race.selected}"
 						v-on:click="handleFilterClick({race: race.name}, race)" >
 						{{ race.displayName }}
@@ -54,7 +57,7 @@
 				<!--稀有度过滤-->
 				<div class=" rarity-filter">
 					<button class=" rarity-filter-btn" 
-						v-for=" rarity in  rarities"
+						v-for=" rarity in DATA.rarities"
 						v-bind:class="{'selected':  rarity.selected}"
 						v-on:click="handleFilterClick({ rarity:  rarity.name},  rarity)" >
 						{{ rarity.displayName }}
@@ -62,16 +65,16 @@
 				</div>
 				<!--异能过滤-->
 				<select name="" id="" class="mechanics-filter"
-					v-model="selectedMech"
-					v-on:change="handleFilterClick({mechanics: selectedMech.name}, selectedMech)">
-					<option v-for="mech in mechanics"
+					v-model="state.selectedMech"
+					v-on:change="handleFilterClick({mechanics: state.selectedMech.name}, state.selectedMech)">
+					<option v-for="mech in DATA.mechanics"
 						v-bind:value="mech">
 						{{ mech.displayName }}
 					</option>
 				</select>
 				<button class="mech-btn"
-					v-for="mech in mechanics"
-					v-on:click="handleFilterClick({mechanics: selectedMech.name}, selectedMech)"
+					v-for="mech in DATA.mechanics"
+					v-on:click="handleFilterClick({mechanics: state.selectedMech.name}, state.selectedMech)"
 					v-if="mech.selected">
 					{{ mech.displayName }}
 				</button>
@@ -80,47 +83,66 @@
 			<div class="card-main">
 				<!--卡牌显示区-->
 				<div class="card-container">
-					<div class="card" v-for="card in cards[currentPage]">
+					<div class="card" v-for="card in cards[state.currentPage]">
 						<img class="card-img"
 						v-on:click="handleCardClick(card)"
-						v-bind:disabled="card.inDeck === 2 || (card.inDeck ===1 && card.rarity === 'LEGENDARY')"
-						v-bind:class="{limit2:card.inDeck === 2 || (card.inDeck ===1 && card.rarity === 'LEGENDARY')}"
+						v-bind:disabled="card.inDeck === 2 
+							|| (card.inDeck ===1 && card.rarity === 'LEGENDARY')"
+						v-bind:class="{limit2:card.inDeck === 2 
+							|| (card.inDeck ===1 && card.rarity === 'LEGENDARY')}"
 						v-bind:src="card.img" 
 						v-bind:alt="card.name">
 					</div>
 				</div>
 				<!--卡组显示区-->
 				<div class="deck-container">
-					总共卡牌数：{{ getDeckLength() }}
-					<ul class="deck-card-container">
-						<li class="deck-card" 
-							v-for="card in deck"
-							v-on:click="handleDeckClick(card)">
-							<img class="deck-card-img"
-								v-bind:src="card.img">
-							<span class="deck-card-name">
-								{{ card.name }}
-							</span>
-							<span class="deck-card-num">
-								{{ card.inDeck }}
-							</span>
-						</li>
-					</ul>
+					<!--选择职业-->
+					<div class="choose-class"
+						v-if="!state.currentClass">
+						<span>选择一个你喜欢的职业吧！</span>
+						<button class="class-filter-btn"
+							v-for="playerClass in DATA.classes"
+							v-if="!playerClass.name.includes('NEUTURAL')"
+							v-on:click="handleChooseClass(playerClass)" >
+							{{ playerClass.displayName }}
+						</button>
+					</div>
+					<!--展示卡组-->
+					<div class="deck-viewer"
+						v-if="state.currentClass">
+						<button
+							v-on:click="handleAbandonClass()">
+							我不要当{{ state.currentClassDisplay }}了！
+						</button>
+						<span>总共卡牌数：{{ getDeckLength() }}</span>
+						<ul class="deck-card-container">
+							<li class="deck-card" 
+								v-for="card in deck"
+								v-on:click="handleDeckClick(card)">
+								<img class="deck-card-img"
+									v-bind:src="card.img">
+								<span class="deck-card-name">
+									{{ card.name }}
+								</span>
+								<span class="deck-card-num">
+									{{ card.inDeck }}
+								</span>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 			<!--翻页-->
 			<button class="paginate-btn" id="pre-page" 
 				v-on:click="prePage()"
-				v-bind:disabled="currentPage===0">
+				v-bind:disabled="state.currentPage===0">
 				上一页
 			</button>
 			<button class="paginate-btn" id="next-page" 
 				v-on:click="nextPage()"
-				v-bind:disabled="currentPage===cards.length - 1 ">
+				v-bind:disabled="state.currentPage===cards.length - 1 ">
 				下一页
 			</button>
-		</div>
-		<div class="deck-viewer">
 		</div>
 	</div>
 </body>
