@@ -6,6 +6,13 @@ const _CARDS = _
     if (!val.playerClass) {
       val.playerClass = "NEUTURAL"
     }
+		if (val.text && val.text.includes('发现')) {
+			if(val.mechanics) {
+				val.mechanics.push('DISCOVER')
+			} else {
+				val.mechanics = ['DISCOVER']
+			}
+		}
     val.inDeck = 0
   })
   .sortBy('cost')
@@ -165,26 +172,120 @@ const cardViewer = new Vue({
 		mechanics: [
 			{
 				displayName: '冲锋',
-				name: ['CHARGE']
+				name: ['CHARGE'],
+				selected: false
 			},
 			{
 				displayName: '亡语',
-				name: ['DEATHRATTLE']
+				name: ['DEATHRATTLE'],
+				selected: false
+			},
+			{
+				displayName: '光环效果',
+				name: ['AURA'],
+				selected: false
+			},
+			{
+				displayName: '相邻随从效果',
+				name: ['ADJACENT_BUFF'],
+				selected: false
 			},
 			{
 				displayName: '战吼',
-				name: ['BATTLECRY']
+				name: ['BATTLECRY'],
+				selected: false
 			},
+			{
+				displayName: '连击',
+				name: ['COMBO'],
+				selected: false
+			},
+			{
+				displayName: '冰冻',
+				name: ['FREEZE'],
+				selected: false
+			},
+			{
+				displayName: '过载',
+				name: ['OVERLOAD'],
+				selected: false
+			},
+			{
+				displayName: '法术伤害',
+				name: ['SPELLPOWER'],
+				selected: false
+			},
+			{
+				displayName: '嘲讽',
+				name: ['TAUNT'],
+				selected: false
+			},
+			{
+				displayName: '圣盾',
+				name: ['DIVINE_SHIELD'],
+				selected: false
+			},
+			{
+				displayName: '风怒',
+				name: ['WINDFURY'],
+				selected: false
+			},
+			{
+				displayName: '激怒',
+				name: ['ENRAGED'],
+				selected: false
+			},
+			{
+				displayName: '潜行',
+				name: ['STEALTH'],
+				selected: false
+			},
+			{
+				displayName: '50%几率打错',
+				name: ['FORGETFUL'],
+				selected: false
+			},
+			{
+				displayName: '激励',
+				name: ['INSPIRE'],
+				selected: false
+			},
+			{
+				displayName: '魔免',
+				name: ['ImmuneToSpellpower'],
+				selected: false
+			},
+			{
+				displayName: '不可见的亡语',
+				name: ['InvisibleDeathrattle'],
+				selected: false
+			},
+			{
+				displayName: '一万攻',
+				name: ['POISONOUS'],
+				selected: false
+			},
+			{
+				displayName: '奥秘',
+				name: ['SECRET'],
+				selected: false
+			},
+			{
+				displayName: '发现',
+				name: ['DISCOVER'],
+				selected: false
+			}
 		],
 		filters: {},
 		PAGE_LIMIT: 8,
 		currentPage:0,
 		deck:[],
+		selectedMech:{}
 	},
 	methods: {
-		handleFilterClick: function ({cost, type, playerClass, rarity}, filterInfo) {
+		handleFilterClick: function ({cost, type, playerClass, rarity, mechanics}, filterInfo) {
 			// 之所以omitBy一下是因为我又想用解构赋值，又不想参数里出现undefined
-			const params = _.omitBy({cost, type, playerClass, rarity}, _.isUndefined)
+			const params = _.omitBy({cost, type, playerClass, rarity, mechanics}, _.isUndefined)
 			// 在处理 selected,因为vm 里的过滤器名字是复数的，所以要另传一个filterInfo
 			filterInfo.selected = !filterInfo.selected
 			this.currentPage = 0
@@ -199,7 +300,9 @@ const cardViewer = new Vue({
 					if (_.size(this.filters) > 0){
 						_.forEach(this.filters, (filter,filterKey) => {
 							_.forEach(filter, val => {
-								if (card[filterKey] === val) {
+								// 判断一下卡牌的属性等不等于val，如果卡牌属性是个数组，那就看包括不包括
+								if (card[filterKey] === val || 
+									(_.isArray(card[filterKey]) && card[filterKey].includes(val))) {
 									valid = true
 									return false
 								} else {
@@ -222,23 +325,27 @@ const cardViewer = new Vue({
 			_.forEach(params, (val, key) => {
 				if (_.isArray(this.filters[key])){
           // 判断现在的filters 里的 filter 和点击的 filter 是否有交集
-          console.log(_.intersection(this.filters[key], val))
 					if (_.intersection(this.filters[key], val).length > 0){
-						// 正好是1就说明删掉这个就没有 filter 了，所以干脆直接删了
-						if (this.filters[key].length === 1){
-							this.filters = _.omit(this.filters, key)
-						} else {
-							this.filters[key] = _.difference(this.filters[key], val)
-						}
+						this.removeFromFilter(key, val)
 					} else {
-						this.filters[key] = this.filters[key].concat(val)
+						this.addToFilter(key,val)
 					}
 				} else {
 					this.filters[key] = val
 				}
 			})
-      console.log(this.filters)
 			return this.filters
+		},
+		addToFilter:function(filterName, filter){
+			this.filters[filterName] = this.filters[filterName].concat(filter)
+		},
+		removeFromFilter:function(filterName, filter){
+			// 正好是1就说明删掉这个就没有 filter 了，所以干脆直接删了
+			if (this.filters[filterName].length === 1){
+				this.filters = _.omit(this.filters, filterName)
+			} else {
+				this.filters[filterName] = _.difference(this.filters[filterName], filter)
+			}
 		},
 		handleCardClick: function(card) {
 			switch(card.inDeck) {
@@ -258,8 +365,6 @@ const cardViewer = new Vue({
       // this.deckLength = _.reduce(this.deck, (sum, val) => {
       //   return sum + val.inDeck
       // },0)
-      console.log(this.deck)
-			console.log(card.inDeck)
 		},
 		handleDeckClick: function(card) {
 			switch(card.inDeck) {
@@ -268,9 +373,7 @@ const cardViewer = new Vue({
 					break
 				case 1:
 					card.inDeck = 0
-          console.log(this.deck, [card])
 					this.deck = _.filter(this.deck, val => {return !(val.name === card.name)})
-          console.log('现在的',this.deck)
 			}
       
 		},

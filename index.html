@@ -48,11 +48,24 @@
 						v-for=" rarity in  rarities"
 						v-bind:class="{'selected':  rarity.selected}"
 						v-on:click="handleFilterClick({ rarity:  rarity.name},  rarity)" >
-						{{  rarity.displayName }}
+						{{ rarity.displayName }}
 					</button>
 				</div>
 				<!--异能过滤-->
-				<select name="" id="" class="mechanics-filter"></select>
+				<select name="" id="" class="mechanics-filter"
+					v-model="selectedMech"
+					v-on:change="handleFilterClick({mechanics: selectedMech.name}, selectedMech)">
+					<option v-for="mech in mechanics"
+						v-bind:value="mech">
+						{{ mech.displayName }}
+					</option>
+				</select>
+				<button class="mech-btn"
+					v-for="mech in mechanics"
+					v-on:click="handleFilterClick({mechanics: selectedMech.name}, selectedMech)"
+					v-if="mech.selected">
+					{{ mech.displayName }}
+				</button>
 			</div>
 			<!--主要显示区-->
 			<div class="card-main">

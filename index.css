@@ -13,6 +13,8 @@
     border: 1px solid black;
     width:200px;
     height: 460px;
+    overflow: auto;
+    padding: 0 1em;
 }
 
 .deck-card-container {
