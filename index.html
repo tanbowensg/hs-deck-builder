@@ -156,6 +156,7 @@
 			</div>
 			<!--卡牌信息统计区-->
 			<div class="deck-statistics">
+				<!--费用信息-->
 				<div class="costs-statistics">
 					<div class="cost-group"
 						v-for="theCost in state.statistics.cost">
@@ -173,9 +174,26 @@
 							</div>
 						</div>
 						<span class="cost-text">
-							{{ theCost.cost }}
+							{{ theCost.name }}
 						</span>
 					</div>
+				</div>
+				<!--卡组构成-->
+				<!--分类统计-->
+				<div class="statistics-group">
+					<span class="statistics-item"
+						v-for="type in state.statistics.type"
+						track-by="name">
+						{{ type.displayName + '：' + type.num }}
+					</span>
+				</div>
+				<!--稀有度统计-->
+				<div class="statistics-group">
+					<span class="statistics-item"
+						v-for="rarity in state.statistics.rarity"
+						track-by="name">
+						{{ rarity.displayName + '：' + rarity.num }}
+					</span>
 				</div>
 			</div>
 		</div>

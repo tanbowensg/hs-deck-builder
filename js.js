@@ -106,6 +106,11 @@ const cardViewer = new Vue({
 			],
 			rarities: [
 				{
+					displayName: '基本',
+					name: ['FREE'],
+					selected: false
+				},
+				{
 					displayName: '普通',
 					name: ['COMMON'],
 					selected: false
@@ -338,16 +343,59 @@ const cardViewer = new Vue({
 			// 重写统计信息
 			const cost = _.map(new Array(10), (val, key) => {
 					return {
-						cost: key,
+						name: key.toString(),
 						num: 0
 					}
 				})
-				console.log(cost)
+
 			this.state.statistics = {
 				costMax :0,
-				cost: cost
+				cost: cost,
+				type: [
+					{
+						displayName: '随从',
+						name: 'MINION',
+						num: 0
+					},
+					{
+						displayName: '法术',
+						name: 'SPELL',
+						num: 0
+					},
+					{
+						displayName: '武器',
+						name: 'WEAPON',
+						num: 0
+					},
+				],
+				rarity: [
+					{
+						displayName: '基本',
+						name: 'FREE',
+						num: 0
+					},
+					{
+						displayName: '普通',
+						name: 'COMMON',
+						num: 0
+					},
+					{
+						displayName: '稀有',
+						name: 'RARE',
+						num: 0
+					},
+					{
+						displayName: '史诗',
+						name: 'EPIC',
+						num: 0
+					},
+					{
+						displayName: '传说',
+						name: 'LEGENDARY',
+						num: 0
+					},
+				]
 			}
-			console.log(this.state.statistics.cost[0])
 			// 把所有过滤器都取消选中
 			_.forEach(this.DATA, data => {
 				if (_.isArray(data)) {
@@ -459,26 +507,26 @@ const cardViewer = new Vue({
 			})
 			return newDeck
 		},
-		updateStatistics:function(){
-			const _deck = this.flattenDeck()
-			const costCount = _
-				.chain(_deck)
-				.countBy('cost')
+		renewFilterStatistics: function (deck, filterName){
+			const count = _
+				.chain(deck)
+				.countBy(filterName)
 				.forEach((val, key) => {
-					this.state.statistics.cost[key].num = val
+					console.log(filterName, key)
+					_.find(this.state.statistics[filterName], {name: key}).num = val
+					console.log(_.find(this.state.statistics[filterName]))
 				})
 				.value()
-				console.log(_.maxBy(this.state.statistics.cost, 'num').num)
+			return count
+		},
+		updateStatistics: function(){
+			const _deck = this.flattenDeck()
+			
+			this.renewFilterStatistics(_deck, 'cost')
+			this.renewFilterStatistics(_deck, 'type')
+			this.renewFilterStatistics(_deck, 'rarity')
+
 			this.state.statistics.costMax = _.maxBy(this.state.statistics.cost, 'num').num
-			// this.state.statistics.cost = _
-			// 	.chain(this.state.statistics.cost)
-			// 	.merge(costCount)
-			// 	.sortBy('cost')
-			// 	.value()
-			// _.forEach(_deck, card => {
-			// 	this.state.statistics.cost[card.cost].num++
-			// })
-			console.log(this.state.statistics.cost)
 		},
 		handleCardClick: function(card) {
 			// 如果还没选择职业的话，就不能选卡
