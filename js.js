@@ -431,6 +431,10 @@ const cardViewer = new Vue({
 			if (!this.state.currentClass) {
 				return false
 			}
+			// 如果超过30张，就不能选卡
+			if (this.getDeckLength() >= 30) {
+				return false
+			}
 			switch(card.inDeck) {
 				case 2:
 					return false
