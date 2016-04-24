@@ -366,8 +366,6 @@ const cardViewer = new Vue({
 				.filter(card => {
 					let valid = false;
 					// 如果是已经选择了职业了，那就先把其他的职业的牌的全部过滤掉
-						&& card.playerClass !== this.state.currentClass
-						&& card.playerClass !== 'NEUTURAL')
 					if (this.state.currentClass 
 						&& card.playerClass !== this.state.currentClass
 						&& card.playerClass !== 'NEUTURAL') {
