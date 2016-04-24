@@ -154,6 +154,30 @@
 					</div>
 				</div>
 			</div>
+			<!--卡牌信息统计区-->
+			<div class="deck-statistics">
+				<div class="costs-statistics">
+					<div class="cost-group"
+						v-for="theCost in state.statistics.cost">
+						<div class="cost-colomn">
+							<span class="num"
+								v-bind:style="{ bottom: theCost.num 
+									/ state.statistics.costMax
+									* 100  + '%' }">
+								{{ theCost.num !==0 ? theCost.num : '' }}
+							</span>
+							<div class="bar"
+								v-bind:style="{ height: theCost.num 
+									/ state.statistics.costMax
+									* 100  + '%' }">
+							</div>
+						</div>
+						<span class="cost-text">
+							{{ theCost.cost }}
+						</span>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>

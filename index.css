@@ -64,3 +64,39 @@
 .selected {
     color:red;
 }
+
+.costs-statistics {
+    border: 1px solid #333;
+    padding: 20px;
+    height: 100px;
+    width: 300px;
+}
+
+.cost-group {
+    height: 100%;
+    font-size:0.8em;
+    width: 20px;
+    margin-left: 6px;
+    display: inline-block;
+    text-align: center;
+}
+
+.cost-colomn {
+    height: 85%;
+    position: relative;
+}
+
+.cost-colomn .bar {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    background: red;
+}
+
+.cost-colomn .num {
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    left: 0;
+    z-index: 100;
+}

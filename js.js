@@ -3,6 +3,7 @@ const _CARDS = _
   .cloneDeep()
   .filter('collectible')
   .forEach(val => {
+		val.img = val.img.replace('http://wow.zamimg.com/images/hearthstone/cards/enus/original/', 'images/')
     if (!val.playerClass) {
       val.playerClass = "NEUTURAL"
     }
@@ -22,6 +23,7 @@ const cardViewer = new Vue({
 	el: '#deck-builder',
 	created: function(){
 		this.chunkCards()
+		this.reset()
 	},
 	data: {
 		cards: _CARDS,
@@ -315,6 +317,7 @@ const cardViewer = new Vue({
 			currentClass:false,
 			currentClassDisplay:'',
 			selectedMech:{},
+			statistics:{}
 		},
 		filters: {},
 		deck:[],
@@ -327,6 +330,19 @@ const cardViewer = new Vue({
 			this.state.currentClass = false
 			this.state.currentClassDisplay = false,
 			this.state.selectedMech = {}
+			// 重写统计信息
+			const cost = _.map(new Array(10), (val, key) => {
+					return {
+						cost: key,
+						num: 0
+					}
+				})
+				console.log(cost)
+			this.state.statistics = {
+				costMax :0,
+				cost: cost
+			}
+			console.log(this.state.statistics.cost[0])
 			// 把所有过滤器都取消选中
 			_.forEach(this.DATA, data => {
 				if (_.isArray(data)) {
@@ -342,6 +358,7 @@ const cardViewer = new Vue({
 					card.inDeck = 0;
 				}
 			})
+			
 			if (refilter) {
 				this.filter()
 			}
@@ -426,6 +443,38 @@ const cardViewer = new Vue({
 				this.filters[filterName] = _.difference(this.filters[filterName], filter)
 			}
 		},
+		flattenDeck:function(){
+			const newDeck = []
+			_.forEach(this.deck, card => {
+				newDeck.push(card)
+				// 如果 inDeck 是2的话，就再 push 一个
+				if (card.inDeck === 2){
+					newDeck.push(card)
+				}
+			})
+			return newDeck
+		},
+		updateStatistics:function(){
+			const _deck = this.flattenDeck()
+			const costCount = _
+				.chain(_deck)
+				.countBy('cost')
+				.forEach((val, key) => {
+					this.state.statistics.cost[key].num = val
+				})
+				.value()
+				console.log(_.maxBy(this.state.statistics.cost, 'num').num)
+			this.state.statistics.costMax = _.maxBy(this.state.statistics.cost, 'num').num
+			// this.state.statistics.cost = _
+			// 	.chain(this.state.statistics.cost)
+			// 	.merge(costCount)
+			// 	.sortBy('cost')
+			// 	.value()
+			// _.forEach(_deck, card => {
+			// 	this.state.statistics.cost[card.cost].num++
+			// })
+			console.log(this.state.statistics.cost)
+		},
 		handleCardClick: function(card) {
 			// 如果还没选择职业的话，就不能选卡
 			if (!this.state.currentClass) {
@@ -450,6 +499,8 @@ const cardViewer = new Vue({
 					card.inDeck = 1
 					break
 			}
+			
+			this.updateStatistics()
 			// this.deckLength = _.reduce(this.deck, (sum, val) => {
 			//   return sum + val.inDeck
 			// },0)
@@ -463,7 +514,8 @@ const cardViewer = new Vue({
 					card.inDeck = 0
 					this.deck = _.filter(this.deck, val => {return !(val.name === card.name)})
 			}
-      
+			
+			this.updateStatistics()
 		},
     getDeckLength: function() {
       return _.reduce(this.deck, (sum, val) => {
