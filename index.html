@@ -19,6 +19,7 @@
 				<div class="cost-filter">
 					<button class="cost-filter-btn" 
 						v-for="cost in DATA.costs"
+						track-by="name"
 						v-bind:class="{'selected': cost.selected}"
 						v-on:click="handleFilterClick({cost: cost.name}, cost)">
 						{{ cost.displayName }}
@@ -28,6 +29,7 @@
 				<div class="class-filter">
 					<button class="class-filter-btn"
 						v-for="playerClass in DATA.classes"
+						track-by="name"
 						v-bind:disabled="state.currentClass
 							&& !playerClass.name.includes('NEUTURAL') 
 							&& !playerClass.name.includes(state.currentClass)"
@@ -40,6 +42,7 @@
 				<div class="type-filter">
 					<button class="type-filter-btn" 
 						v-for="type in DATA.types"
+						track-by="name"
 						v-bind:class="{'selected': type.selected}"
 						v-on:click="handleFilterClick({type: type.name}, type)" >
 						{{ type.displayName }}
@@ -49,6 +52,7 @@
 				<div class="race-filter">
 					<button class="race-filter-btn" 
 						v-for="race in DATA.races"
+						track-by="name"
 						v-bind:class="{'selected': race.selected}"
 						v-on:click="handleFilterClick({race: race.name}, race)" >
 						{{ race.displayName }}
@@ -58,6 +62,7 @@
 				<div class=" rarity-filter">
 					<button class=" rarity-filter-btn" 
 						v-for=" rarity in DATA.rarities"
+						track-by="name"
 						v-bind:class="{'selected':  rarity.selected}"
 						v-on:click="handleFilterClick({ rarity:  rarity.name},  rarity)" >
 						{{ rarity.displayName }}
@@ -68,12 +73,14 @@
 					v-model="state.selectedMech"
 					v-on:change="handleFilterClick({mechanics: state.selectedMech.name}, state.selectedMech)">
 					<option v-for="mech in DATA.mechanics"
+						track-by="name"
 						v-bind:value="mech">
 						{{ mech.displayName }}
 					</option>
 				</select>
 				<button class="mech-btn"
 					v-for="mech in DATA.mechanics"
+					track-by="name"
 					v-on:click="handleFilterClick({mechanics: state.selectedMech.name}, state.selectedMech)"
 					v-if="mech.selected">
 					{{ mech.displayName }}
@@ -83,7 +90,9 @@
 			<div class="card-main">
 				<!--卡牌显示区-->
 				<div class="card-container">
-					<div class="card" v-for="card in cards[state.currentPage]">
+					<div class="card" 
+						v-for="card in cards[state.currentPage]"
+						track-by="id">
 						<img class="card-img"
 						v-on:click="handleCardClick(card)"
 						v-bind:disabled="card.inDeck === 2 
@@ -102,6 +111,7 @@
 						<span>选择一个你喜欢的职业吧！</span>
 						<button class="class-filter-btn"
 							v-for="playerClass in DATA.classes"
+							track-by="name"
 							v-if="!playerClass.name.includes('NEUTURAL')"
 							v-on:click="handleChooseClass(playerClass)" >
 							{{ playerClass.displayName }}
@@ -118,6 +128,7 @@
 						<ul class="deck-card-container">
 							<li class="deck-card" 
 								v-for="card in deck"
+								track-by="id"
 								v-on:click="handleDeckClick(card)">
 								<img class="deck-card-img"
 									v-bind:src="card.img">
