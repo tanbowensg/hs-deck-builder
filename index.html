@@ -130,7 +130,7 @@
 					</div>
 					<!--展示卡组-->
 					<div class="deck-viewer"
-						v-if="state.currentClass">
+						v-else>
 						<button
 							v-on:click="handleAbandonClass()">
 							我不要当{{ state.currentClassDisplay }}了！
