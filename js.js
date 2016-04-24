@@ -332,6 +332,13 @@ const cardViewer = new Vue({
 		filters: {},
 		deck:[],
 	},
+	computed: {
+		deckLength: function() {
+      return _.reduce(this.deck, (sum, val) => {
+        return sum + val.inDeck
+      },0)
+    },
+	},
 	methods: {
 		reset: function(refilter = false) {
 			this.state.currentPage = 0
@@ -534,7 +541,7 @@ const cardViewer = new Vue({
 				return false
 			}
 			// 如果超过30张，就不能选卡
-			if (this.getDeckLength() >= 30) {
+			if (this.deckLength >= 30) {
 				return false
 			}
 			switch(card.inDeck) {
@@ -570,11 +577,6 @@ const cardViewer = new Vue({
 			
 			this.updateStatistics()
 		},
-    getDeckLength: function() {
-      return _.reduce(this.deck, (sum, val) => {
-        return sum + val.inDeck
-      },0)
-    },
 		chunkCards: function() {
 			this.cards = _.chunk(this.cards, this.DATA.PAGE_LIMIT)
 			return this.cards

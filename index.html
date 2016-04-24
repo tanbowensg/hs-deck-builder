@@ -135,7 +135,7 @@
 							v-on:click="handleAbandonClass()">
 							我不要当{{ state.currentClassDisplay }}了！
 						</button>
-						<span>总共卡牌数：{{ getDeckLength() }}</span>
+						<span>总共卡牌数：{{ deckLength }}</span>
 						<ul class="deck-card-container">
 							<li class="deck-card" 
 								v-for="card in deck"
