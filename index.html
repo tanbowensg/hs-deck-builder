@@ -81,7 +81,7 @@
 				<button class="mech-btn"
 					v-for="mech in DATA.mechanics"
 					track-by="name"
-					v-on:click="handleFilterClick({mechanics: state.selectedMech.name}, state.selectedMech)"
+					v-on:click="handleFilterClick({mechanics: mech.name}, mech)"
 					v-if="mech.selected">
 					{{ mech.displayName }}
 				</button>
@@ -102,6 +102,17 @@
 						v-bind:src="card.img" 
 						v-bind:alt="card.name">
 					</div>
+					<!--翻页-->
+					<button class="paginate-btn" id="pre-page" 
+						v-on:click="prePage()"
+						v-bind:disabled="state.currentPage===0">
+						上一页
+					</button>
+					<button class="paginate-btn" id="next-page" 
+						v-on:click="nextPage()"
+						v-bind:disabled="state.currentPage===cards.length - 1 ">
+						下一页
+					</button>
 				</div>
 				<!--卡组显示区-->
 				<div class="deck-container">
@@ -143,17 +154,6 @@
 					</div>
 				</div>
 			</div>
-			<!--翻页-->
-			<button class="paginate-btn" id="pre-page" 
-				v-on:click="prePage()"
-				v-bind:disabled="state.currentPage===0">
-				上一页
-			</button>
-			<button class="paginate-btn" id="next-page" 
-				v-on:click="nextPage()"
-				v-bind:disabled="state.currentPage===cards.length - 1 ">
-				下一页
-			</button>
 		</div>
 	</div>
 </body>

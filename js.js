@@ -446,6 +446,7 @@ const cardViewer = new Vue({
 					break
 				default:
 					this.deck.push(card)
+					this.deck = _.sortBy(this.deck, 'cost')
 					card.inDeck = 1
 					break
 			}
