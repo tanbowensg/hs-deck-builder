@@ -98,6 +98,11 @@ const cardViewer = new Vue({
 					name: ['SPELL'],
 					selected: false
 				},
+				{
+					displayName: '武器',
+					name: ['WEAPON'],
+					selected: false
+				},
 			],
 			rarities: [
 				{
