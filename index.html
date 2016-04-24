@@ -42,6 +42,15 @@
 						{{ type.displayName }}
 					</button>
 				</div>
+				<!--种族过滤-->
+				<div class="race-filter">
+					<button class="race-filter-btn" 
+						v-for="race in races"
+						v-bind:class="{'selected': race.selected}"
+						v-on:click="handleFilterClick({race: race.name}, race)" >
+						{{ race.displayName }}
+					</button>
+				</div>
 				<!--稀有度过滤-->
 				<div class=" rarity-filter">
 					<button class=" rarity-filter-btn" 

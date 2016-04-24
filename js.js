@@ -276,6 +276,37 @@ const cardViewer = new Vue({
 				selected: false
 			}
 		],
+		races: [
+			{
+				"name": ["MURLOC"],
+				"displayName": "鱼人",
+				"selected": false
+			}, {
+				"name": ["MECHANICAL"],
+				"displayName": "机械",
+				"selected": false
+			}, {
+				"name": ["DEMON"],
+				"displayName": "恶魔",
+				"selected": false
+			}, {
+				"name": ["PIRATE"],
+				"displayName": "海盗",
+				"selected": false
+			}, {
+				"name": ["BEAST"],
+				"displayName": "野兽",
+				"selected": false
+			}, {
+				"name": ["DRAGON"],
+				"displayName": "龙",
+				"selected": false
+			}, {
+				"name": ["TOTEM"],
+				"displayName": "图腾",
+				"selected": false
+			}
+		],
 		filters: {},
 		PAGE_LIMIT: 8,
 		currentPage:0,
@@ -283,9 +314,9 @@ const cardViewer = new Vue({
 		selectedMech:{}
 	},
 	methods: {
-		handleFilterClick: function ({cost, type, playerClass, rarity, mechanics}, filterInfo) {
+		handleFilterClick: function ({cost, type, playerClass, rarity, race, mechanics}, filterInfo) {
 			// 之所以omitBy一下是因为我又想用解构赋值，又不想参数里出现undefined
-			const params = _.omitBy({cost, type, playerClass, rarity, mechanics}, _.isUndefined)
+			const params = _.omitBy({cost, type, playerClass, rarity, race, mechanics}, _.isUndefined)
 			// 在处理 selected,因为vm 里的过滤器名字是复数的，所以要另传一个filterInfo
 			filterInfo.selected = !filterInfo.selected
 			this.currentPage = 0
