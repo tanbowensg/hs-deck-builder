@@ -85,6 +85,12 @@
 					v-if="mech.selected">
 					{{ mech.displayName }}
 				</button>
+				<!--描述过滤-->
+				<div class="keyword-filter">
+					<input type="text"
+						v-on:change="handleKeywordChange()"
+						v-model="keyword">
+				</div>
 			</div>
 			<!--主要显示区-->
 			<div class="card-main">

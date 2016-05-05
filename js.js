@@ -330,6 +330,7 @@ const cardViewer = new Vue({
 			statistics:{}
 		},
 		filters: {},
+		keyword:'',
 		deck:[],
 	},
 	computed: {
@@ -343,6 +344,7 @@ const cardViewer = new Vue({
 		reset: function(refilter = false) {
 			this.state.currentPage = 0
 			this.filters = {}
+			this.keyword = ''
 			this.deck = []
 			this.state.currentClass = false
 			this.state.currentClassDisplay = false,
@@ -441,7 +443,11 @@ const cardViewer = new Vue({
 			this.updateFilters(params)
 			this.filter(params)
 		},
+		handleKeywordChange: function() {
+			this.filter()
+		},
 		filter: function(params) {
+			const checkKeyword = _.isString(this.keyword) && this.keyword !== ''
 			this.cards = _
 				.chain(this.CARDS)
 				.filter(card => {
@@ -453,6 +459,10 @@ const cardViewer = new Vue({
 						return false
 					}
 					// 如果没有选择其他职业那就继续过滤
+					if (checkKeyword && (!card.text || !card.text.includes(this.keyword))) {
+						return false
+					}
+					
 					if (_.size(this.filters) > 0){
 						_.forEach(this.filters, (filter,filterKey) => {
 							_.forEach(filter, val => {
